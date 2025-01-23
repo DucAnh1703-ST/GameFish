@@ -5,14 +5,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.gamefish.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var gameView: GameView
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+
+        // Binding
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -21,19 +27,24 @@ class MainActivity : AppCompatActivity() {
 
         // Tạo GameView và đặt nó làm content view
         gameView = GameView(this)
-        setContentView(gameView)
+        binding.gameContainer.addView(gameView)
+
+        // Bắt sự kiện nhấn nút Add để thêm một con cá ngẫu nhiên
+        binding.btnAdd.setOnClickListener {
+            gameView.createRandomFish()  // Thêm cá ngẫu nhiên vào GameView
+        }
 
         // Bắt đầu game
         gameView.startGame()
     }
 
-    override fun onPause() {
-        super.onPause()
-        gameView.stopGame()  // Dừng game khi chuyển sang trạng thái pause
-    }
-
-    override fun onResume() {
-        super.onResume()
-        gameView.startGame()  // Tiếp tục game khi quay lại
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        gameView.stopGame()  // Dừng game khi chuyển sang trạng thái pause
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        gameView.startGame()  // Tiếp tục game khi quay lại
+//    }
 }
