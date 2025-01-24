@@ -37,14 +37,4 @@ class MainActivity : AppCompatActivity() {
         // Bắt đầu game
         gameView.startGame()
     }
-
-//    override fun onPause() {
-//        super.onPause()
-//        gameView.stopGame()  // Dừng game khi chuyển sang trạng thái pause
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        gameView.startGame()  // Tiếp tục game khi quay lại
-//    }
 }

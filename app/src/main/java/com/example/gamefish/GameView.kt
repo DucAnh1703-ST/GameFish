@@ -16,11 +16,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 class GameView(context: Context) : SurfaceView(context){
     private val fishes = mutableListOf<Fish>()  // Danh sách các con cá
 
-    private val fish = Fish(500f, 500f, 15f)
     private val paint = Paint()
     private var job: Job? = null  // Job để quản lý coroutine
     private var isRunning = false
@@ -28,33 +28,54 @@ class GameView(context: Context) : SurfaceView(context){
     private val backgroundBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.background)  // Khai báo và khởi tạo hình nền
 
     private val padding = 60f  // Khoảng cách từ biên tới bể cá
-    private var left = padding
-    private var top = 400f
-    private var right = width.toFloat() - padding
-    private var bottom = height.toFloat() - padding
+    private var left = 0f
+    private var top = 0f
+    private var right = 0f
+    private var bottom = 0f
 
     // Hàm tạo các con cá ngẫu nhiên
     fun createRandomFish() {
         val randomX = (left + (Math.random() * (right - left))).toFloat()
         val randomY = (top + (Math.random() * (bottom - top))).toFloat()
-        val randomSpeed = (5f + Math.random() * 10f).toFloat()  // Tốc độ ngẫu nhiên từ 5 đến 15
-        val fish = Fish(randomX, randomY, randomSpeed)
-        fishes.add(fish)
+        val randomSpeed = (2f + Math.random() * 7f).toFloat()  // Tốc độ ngẫu nhiên từ 5 đến 15
+        val randomSize = (20f + Math.random() * 30f).toFloat()  // Kích thước ngẫu nhiên từ 20f đến 50f
+        val fish1 = Shark(
+            "abc",
+            Color.RED,
+            randomX,
+            randomY,
+            randomSize,
+            randomSpeed,
+            { randomX, randomY -> "CouldMoveForward" },
+            { fish -> println("Checking fish...") }
+        )
+
+        val fish2 = Tuna(
+            "abc",
+            Color.GREEN,
+            randomX,
+            randomY,
+            randomSize,
+            randomSpeed,
+            { randomX, randomY -> "CouldMoveForward" },
+            { fish -> println("Checking fish...") }
+        )
+        fish1.startFishMovement(left, top, right, bottom) // Bắt đầu vòng lặp di chuyển của cá
+        fish2.startFishMovement(left, top, right, bottom) // Bắt đầu vòng lặp di chuyển của cá
+        fishes.add(fish1)
+        fishes.add(fish2)
     }
 
     // Vẽ bể cá cố định
     private fun drawFishTank(canvas: Canvas) {
         left = padding
-        top = 400f
+        top = padding
         right = width.toFloat() - padding
         bottom = height.toFloat() - padding
 
-        // Vẽ hình nền
-        val backgroundLeft = left
-
         // Vẽ hình nền chiếm toàn bộ khu vực bể cá
         canvas.drawBitmap(backgroundBitmap, null,
-            RectF(backgroundLeft, top, right, bottom), paint)
+            RectF(left, top, right, bottom), paint)
 
         // Vẽ khung bể cá (hình chữ nhật)
         paint.color = Color.BLACK  // Màu của khung
@@ -63,28 +84,25 @@ class GameView(context: Context) : SurfaceView(context){
         canvas.drawRect(left, top, right, bottom, paint)  // Vẽ khung bể cá
     }
 
-    // Sử dụng Coroutine để chạy vòng lặp trò chơi
+    // Vòng lặp trò chơi (sử dụng coroutine)
     @OptIn(DelicateCoroutinesApi::class)
     private fun gameLoop() {
         GlobalScope.launch(Dispatchers.Default) {
             try {
-                while (isRunning) {
+                while (true) {
                     if (holder.surface.isValid) {
                         val canvas = holder.lockCanvas()
                         canvas.drawColor(Color.WHITE)  // Xóa màn hình trước khi vẽ lại
-
-                        // Vẽ bể cá cố định
                         drawFishTank(canvas)
 
                         // Vẽ và cập nhật tất cả các con cá
                         for (fish in fishes) {
-                            fish.update(left, top, right, bottom)
                             fish.draw(canvas, paint)
                         }
 
                         holder.unlockCanvasAndPost(canvas)
                     }
-                    delay(10)  // Khoảng thời gian giữa các frame (60 FPS)
+                    delay(10) // Khoảng thời gian giữa các frame (60 FPS)
                 }
             } catch (e: Exception) {
                 Log.e("GameView", "Error in game loop: ${e.message}")
@@ -93,29 +111,7 @@ class GameView(context: Context) : SurfaceView(context){
     }
 
     fun startGame() {
-        isRunning = true
-        if (job == null || job?.isCompleted == true) {
-            job = CoroutineScope(Dispatchers.Default).launch {
-                createRandomFish()  // Tạo 3 con cá ngẫu nhiên khi bắt đầu trò chơi
-                gameLoop()  // Khởi chạy coroutine cho vòng lặp trò chơi
-            }
-        }
+        createRandomFish()  // Tạo con cá ngẫu nhiên khi bắt đầu trò chơi
+        gameLoop()  // Khởi chạy vòng lặp trò chơi
     }
-
-//    fun stopGame() {
-//        isRunning = false
-//        job?.cancel()  // Dừng coroutine khi game dừng
-//        Log.d("Running123", "isRunning = $isRunning")
-//    }
-//
-//    // Lắng nghe sự kiện touch nếu bạn muốn tương tác
-//    @SuppressLint("ClickableViewAccessibility")
-//    override fun onTouchEvent(event: MotionEvent): Boolean {
-//        if (event.action == MotionEvent.ACTION_DOWN) {
-//            // Ví dụ: random hướng di chuyển mới khi người chơi chạm vào màn hình
-//            //fish.randomizeDirection()
-//            Log.d("Running","isRunning = $isRunning")
-//        }
-//        return true
-//    }
 }
