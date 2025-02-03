@@ -6,6 +6,7 @@ import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -16,8 +17,8 @@ open class Fish(
     var y: Float,
     var size: Float,
     var speed: Float,
-    val howTodo: ((x:Int, y:Int) -> String)?, // check list been fish tank de tim ra cac doi tuong trung x va y -> xu ly
-    val check: ((fish: Fish) -> Unit)? // xu ly xem co muc dc con o phia truoc k
+//    val howTodo: ((x:Int, y:Int) -> String)?, // check list been fish tank de tim ra cac doi tuong trung x va y -> xu ly
+//    val check: ((fish: Fish) -> Unit)? // xu ly xem co muc dc con o phia truoc k
 )
 {
 //    open var speed: Float = 0.0f
@@ -29,16 +30,46 @@ open class Fish(
     private var job: Job? = null
     private var isRunning = false
 
+    // Kiểm tra va chạm với các cá khác
+    fun checkCollision(fishes: List<Fish>) {
+        for (otherFish in fishes) {
+            // Tránh kiểm tra va chạm với chính con cá mình
+            if (this == otherFish) continue
+
+            // Tính khoảng cách giữa hai con cá
+            val distance = Math.sqrt(
+                ((x - otherFish.x) * (x - otherFish.x) + (y - otherFish.y) * (y - otherFish.y)).toDouble()
+            ).toFloat()
+
+            // Nếu khoảng cách nhỏ hơn tổng bán kính, có thể xảy ra va chạm
+            if (distance < (size + otherFish.size)) {
+                handleCollision(otherFish)
+            }
+        }
+    }
+
+    // Xử lý va chạm giữa hai con cá
+    private fun handleCollision(otherFish: Fish) {
+        if (this.size > otherFish.size) {
+            this.size += otherFish.size  // Cá lớn hơn ăn cá nhỏ hơn, tăng kích thước
+            otherFish.size = 0f  // Cá nhỏ hơn sẽ bị xóa (kích thước thành 0)
+        } else {
+            otherFish.size += this.size  // Cá lớn hơn ăn cá nhỏ hơn, tăng kích thước
+            this.size = 0f  // Cá nhỏ hơn sẽ bị xóa (kích thước thành 0)
+        }
+    }
+
     // Bắt đầu vòng lặp di chuyển của con cá
-    fun startFishMovement(left: Float, top: Float, right: Float, bottom: Float) {
+    fun startFishMovement(left: Float, top: Float, right: Float, bottom: Float, fishes: List<Fish>) {
         if (isRunning) return // Nếu cá đã đang chạy, không tạo thêm coroutine
 
         isRunning = true
-        job = CoroutineScope(Dispatchers.Default).launch {
+        job = CoroutineScope(Dispatchers.Default + SupervisorJob()).launch {
             try {
                 while (isRunning) {
                     // Cập nhật vị trí và vẽ cá
                     update(left, top, right, bottom)
+                    checkCollision(fishes)  // Kiểm tra va chạm với các cá khác
                     delay(10) // 60 FPS
                 }
             } catch (e: Exception) {

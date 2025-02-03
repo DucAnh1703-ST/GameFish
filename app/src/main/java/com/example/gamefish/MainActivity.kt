@@ -8,7 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.gamefish.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var gameView: GameView
+    private lateinit var gameView: FishTankView
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Tạo GameView và đặt nó làm content view
-        gameView = GameView(this)
+        gameView = FishTankView(this)
         binding.gameContainer.addView(gameView)
 
         // Bắt sự kiện nhấn nút Add để thêm một con cá ngẫu nhiên

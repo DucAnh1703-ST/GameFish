@@ -9,16 +9,14 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.Log
 import android.view.SurfaceView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
-class GameView(context: Context) : SurfaceView(context){
+class FishTankView(context: Context) : SurfaceView(context){
     private val fishes = mutableListOf<Fish>()  // Danh sách các con cá
 
     private val paint = Paint()
@@ -45,25 +43,13 @@ class GameView(context: Context) : SurfaceView(context){
             randomX,
             randomY,
             randomSize,
-            randomSpeed,
-            { randomX, randomY -> "CouldMoveForward" },
-            { fish -> println("Checking fish...") }
+            randomSpeed
+//            { randomX, randomY -> "CouldMoveForward" },
+//            { fish -> println("Checking fish...") }
         )
 
-        val fish2 = Tuna(
-            "abc",
-            Color.GREEN,
-            randomX,
-            randomY,
-            randomSize,
-            randomSpeed,
-            { randomX, randomY -> "CouldMoveForward" },
-            { fish -> println("Checking fish...") }
-        )
-        fish1.startFishMovement(left, top, right, bottom) // Bắt đầu vòng lặp di chuyển của cá
-        fish2.startFishMovement(left, top, right, bottom) // Bắt đầu vòng lặp di chuyển của cá
+        fish1.startFishMovement(left, top, right, bottom, fishes) // Bắt đầu di chuyển
         fishes.add(fish1)
-        fishes.add(fish2)
     }
 
     // Vẽ bể cá cố định
@@ -95,9 +81,21 @@ class GameView(context: Context) : SurfaceView(context){
                         canvas.drawColor(Color.WHITE)  // Xóa màn hình trước khi vẽ lại
                         drawFishTank(canvas)
 
+//                        // Vẽ và cập nhật tất cả các con cá
+//                        for (fish in fishes) {
+//                            fish.draw(canvas, paint)
+//                        }
+
                         // Vẽ và cập nhật tất cả các con cá
-                        for (fish in fishes) {
+                        val iterator = fishes.iterator()
+                        while (iterator.hasNext()) {
+                            val fish = iterator.next()
                             fish.draw(canvas, paint)
+
+                            // Nếu cá có kích thước 0, loại bỏ khỏi danh sách
+                            if (fish.size <= 0) {
+                                iterator.remove() // Xóa cá đã bị ăn
+                            }
                         }
 
                         holder.unlockCanvasAndPost(canvas)
