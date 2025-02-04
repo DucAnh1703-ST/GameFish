@@ -37,19 +37,18 @@ class FishTankView(context: Context) : SurfaceView(context){
         val randomY = (top + (Math.random() * (bottom - top))).toFloat()
         val randomSpeed = (2f + Math.random() * 7f).toFloat()  // Tốc độ ngẫu nhiên từ 5 đến 15
         val randomSize = (20f + Math.random() * 30f).toFloat()  // Kích thước ngẫu nhiên từ 20f đến 50f
-        val fish1 = Shark(
-            "abc",
-            Color.RED,
-            randomX,
-            randomY,
-            randomSize,
-            randomSpeed
-//            { randomX, randomY -> "CouldMoveForward" },
-//            { fish -> println("Checking fish...") }
-        )
 
-        fish1.startFishMovement(left, top, right, bottom, fishes) // Bắt đầu di chuyển
-        fishes.add(fish1)
+        // Chọn một loại cá ngẫu nhiên giữa 0, 1 và 2
+        val fishType = (Math.random() * 3).toInt()
+
+        val fish = when (fishType) {
+            0 -> Shark("Shark", Color.RED, randomX, randomY, randomSize, randomSpeed)
+            1 -> Tuna("Tuna", Color.BLUE, randomX, randomY, randomSize, randomSpeed)
+            else -> SwordFish("SwordFish", Color.GREEN, randomX, randomY, randomSize, randomSpeed)
+        }
+
+        fish.startFishMovement(left, top, right, bottom, fishes) // Bắt đầu di chuyển
+        fishes.add(fish)
     }
 
     // Vẽ bể cá cố định
@@ -109,7 +108,7 @@ class FishTankView(context: Context) : SurfaceView(context){
     }
 
     fun startGame() {
-        createRandomFish()  // Tạo con cá ngẫu nhiên khi bắt đầu trò chơi
+//        createRandomFish()  // Tạo con cá ngẫu nhiên khi bắt đầu trò chơi
         gameLoop()  // Khởi chạy vòng lặp trò chơi
     }
 }
