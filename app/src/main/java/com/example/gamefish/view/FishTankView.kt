@@ -1,4 +1,4 @@
-package com.example.gamefish
+package com.example.gamefish.view
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,6 +9,14 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.Log
 import android.view.SurfaceView
+import com.example.gamefish.R
+import com.example.gamefish.view.child.SharkView
+import com.example.gamefish.view.child.SwordFishView
+import com.example.gamefish.view.child.TunaView
+import com.example.gamefish.viewmodel.dt_model.Fish
+import com.example.gamefish.viewmodel.dt_model.Shark
+import com.example.gamefish.viewmodel.dt_model.SwordFish
+import com.example.gamefish.viewmodel.dt_model.Tuna
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,12 +26,16 @@ import kotlinx.coroutines.launch
 
 class FishTankView(context: Context) : SurfaceView(context){
     private val fishes = mutableListOf<Fish>()  // Danh sách các con cá
+    private val fishViews = mutableListOf<FishView>()  // Danh sách các FishView để vẽ cá
+
 
     private val paint = Paint()
     private var job: Job? = null  // Job để quản lý coroutine
     private var isRunning = false
 
-    private val backgroundBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.background)  // Khai báo và khởi tạo hình nền
+    private val backgroundBitmap: Bitmap = BitmapFactory.decodeResource(context.resources,
+        R.drawable.background
+    )  // Khai báo và khởi tạo hình nền
 
     private val padding = 60f  // Khoảng cách từ biên tới bể cá
     private var left = 0f
@@ -49,6 +61,18 @@ class FishTankView(context: Context) : SurfaceView(context){
 
         fish.startFishMovement(left, top, right, bottom, fishes) // Bắt đầu di chuyển
         fishes.add(fish)
+
+//        // Tạo FishView để vẽ cá
+//        fishViews.add(FishView(fish))
+
+        // Tạo FishView tương ứng cho mỗi loại cá
+        val fishView = when (fish) {
+            is Shark -> SharkView(fish)
+            is Tuna -> TunaView(fish)  // TunaView là một lớp tương tự như SharkView
+            else -> SwordFishView(fish) // SwordFishView tương tự
+        }
+
+        fishViews.add(fishView)
     }
 
     // Vẽ bể cá cố định
@@ -85,14 +109,26 @@ class FishTankView(context: Context) : SurfaceView(context){
 //                            fish.draw(canvas, paint)
 //                        }
 
-                        // Vẽ và cập nhật tất cả các con cá
-                        val iterator = fishes.iterator()
+//                        // Vẽ và cập nhật tất cả các con cá
+//                        val iterator = fishes.iterator()
+//                        while (iterator.hasNext()) {
+//                            val fish = iterator.next()
+//                            fish.draw(canvas, paint)
+//
+//                            // Nếu cá có kích thước 0, loại bỏ khỏi danh sách
+//                            if (fish.size <= 0) {
+//                                iterator.remove() // Xóa cá đã bị ăn
+//                            }
+//                        }
+
+                        // Vẽ và cập nhật tất cả các con cá thông qua FishView
+                        val iterator = fishViews.iterator()
                         while (iterator.hasNext()) {
-                            val fish = iterator.next()
-                            fish.draw(canvas, paint)
+                            val fishView = iterator.next()
+                            fishView.draw(canvas, paint)
 
                             // Nếu cá có kích thước 0, loại bỏ khỏi danh sách
-                            if (fish.size <= 0) {
+                            if (fishView.fish.size <= 0) {
                                 iterator.remove() // Xóa cá đã bị ăn
                             }
                         }

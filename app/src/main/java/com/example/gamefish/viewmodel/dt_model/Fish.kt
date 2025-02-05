@@ -1,4 +1,4 @@
-package com.example.gamefish
+package com.example.gamefish.viewmodel.dt_model
 
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -64,7 +64,7 @@ open class Fish(
         if (isRunning) return // Nếu cá đã đang chạy, không tạo thêm coroutine
 
         isRunning = true
-        job = CoroutineScope(Dispatchers.Default + SupervisorJob()).launch {
+        job = CoroutineScope(Dispatchers.Default).launch {
             try {
                 while (isRunning) {
                     // Cập nhật vị trí và vẽ cá
