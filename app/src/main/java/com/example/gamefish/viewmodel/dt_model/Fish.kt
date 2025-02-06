@@ -1,12 +1,9 @@
 package com.example.gamefish.viewmodel.dt_model
 
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -26,7 +23,7 @@ open class Fish(
     private var isRunning = false
 
     // Kiểm tra va chạm với các cá khác
-    fun checkCollision(fishes: List<Fish>) {
+    private fun checkCollision(fishes: List<Fish>) {
         for (otherFish in fishes) {
             // Tránh kiểm tra va chạm với chính con cá mình
             if (this == otherFish) continue
@@ -63,7 +60,7 @@ open class Fish(
             try {
                 while (isRunning) {
                     // Cập nhật vị trí và vẽ cá
-                    update(left, top, right, bottom)
+                    move(left, top, right, bottom)
                     checkCollision(fishes)  // Kiểm tra va chạm với các cá khác
                     delay(10) // 60 FPS
                 }
@@ -73,11 +70,8 @@ open class Fish(
         }
     }
 
-    open fun draw(canvas: Canvas, paint: Paint){
-    }
-
     // Cập nhật vị trí con cá
-    fun update(left: Float, top: Float, right: Float, bottom: Float) {
+    private fun move(left: Float, top: Float, right: Float, bottom: Float) {
         // Di chuyển cá
         x += directionX * speed
         y += directionY * speed

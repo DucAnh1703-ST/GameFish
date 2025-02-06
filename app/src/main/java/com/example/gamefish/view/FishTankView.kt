@@ -16,7 +16,6 @@ import com.example.gamefish.view.child.SharkView
 import com.example.gamefish.view.child.SwordFishView
 import com.example.gamefish.view.child.TunaView
 import com.example.gamefish.viewmodel.FishTank
-import com.example.gamefish.viewmodel.FishTankViewModel
 import com.example.gamefish.viewmodel.dt_model.Fish
 import com.example.gamefish.viewmodel.dt_model.Shark
 import com.example.gamefish.viewmodel.dt_model.Tuna
@@ -27,7 +26,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FishTankView(context: Context) : SurfaceView(context) {
-    private val fishTankViewModel: FishTankViewModel = ViewModelProvider(context as MainActivity).get(FishTankViewModel::class.java)
 
     private val fishTank = FishTank()  // Lớp quản lý cá
     private val fishViews = mutableListOf<FishView>()  // Danh sách các FishView để vẽ cá
@@ -39,28 +37,6 @@ class FishTankView(context: Context) : SurfaceView(context) {
     )  // Khai báo và khởi tạo hình nền
 
     private val padding = 60f  // Khoảng cách từ biên tới bể cá
-
-//    init {
-//        // Quan sát LiveData để cập nhật danh sách cá khi có sự thay đổi
-//        fishTankViewModel.fishes.observe(context as MainActivity, Observer { fishes ->
-//            updateFishViews(fishes)
-//            invalidate()  // Vẽ lại UI khi danh sách cá thay đổi
-//        })
-//    }
-//
-//    // Cập nhật danh sách các FishView khi danh sách Fish thay đổi
-//    private fun updateFishViews(fishes: List<Fish>) {
-//        fishViews.clear()  // Xóa danh sách FishView cũ
-//        fishes.forEach { fish ->
-//            val fishView = when (fish) {
-//                is Shark -> SharkView(fish)
-//                is Tuna -> TunaView(fish)
-//                else -> SwordFishView(fish)
-//            }
-//            fishViews.add(fishView)
-//        }
-//    }
-
 
     // Hàm tạo các con cá ngẫu nhiên
     fun createRandomFish() {

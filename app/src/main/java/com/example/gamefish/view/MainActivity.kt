@@ -9,12 +9,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.gamefish.R
 import com.example.gamefish.databinding.ActivityMainBinding
-import com.example.gamefish.viewmodel.FishTankViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var gameView: FishTankView
     private lateinit var binding: ActivityMainBinding
-    private lateinit var fishTankViewModel: FishTankViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +21,6 @@ class MainActivity : AppCompatActivity() {
         // Binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Khởi tạo ViewModel
-        fishTankViewModel = ViewModelProvider(this).get(FishTankViewModel::class.java)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

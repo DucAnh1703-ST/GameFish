@@ -8,17 +8,12 @@ import com.example.gamefish.viewmodel.dt_model.Fish
 
 class SwordFishView(fish: Fish) : FishView(fish) {
 
-    // Override phương thức draw() để vẽ cá mập
+    // Override phương thức draw() để vẽ cá kiếm
     override fun draw(canvas: Canvas, paint: Paint) {
-        // Vẽ cá mập (ví dụ vẽ hình tròn cho cá mập)
-        paint.color = fish.color
-        paint.style = Paint.Style.FILL
-        canvas.drawCircle(fish.x, fish.y, fish.size, paint)
+        drawBody(canvas, paint) // Vẽ phần chung của cá
 
-        // Vẽ tên của cá mập dưới con cá
-        paint.color = Color.BLACK // Màu chữ
-        paint.textSize = 40f // Kích thước chữ
-        paint.textAlign = Paint.Align.CENTER // Căn giữa chữ
-        canvas.drawText(fish.name, fish.x, fish.y + fish.size + 35f, paint)
+        // Vẽ "kiếm" dài của cá kiếm
+        paint.color = Color.DKGRAY
+        canvas.drawLine(fish.x, fish.y - fish.size, fish.x, fish.y - fish.size - fish.size, paint) // Mũi kiếm dài
     }
 }

@@ -8,17 +8,18 @@ import com.example.gamefish.viewmodel.dt_model.Tuna
 
 class TunaView(fish: Tuna) : FishView(fish) {
 
-    // Override phương thức draw() để vẽ cá mập
     override fun draw(canvas: Canvas, paint: Paint) {
-        // Vẽ cá mập (ví dụ vẽ hình tròn cho cá mập)
-        paint.color = fish.color
-        paint.style = Paint.Style.FILL
-        canvas.drawCircle(fish.x, fish.y, fish.size, paint)
+        drawBody(canvas, paint)  // Vẽ phần thân cá ngừ
 
-        // Vẽ tên của cá mập dưới con cá
-        paint.color = Color.BLACK // Màu chữ
-        paint.textSize = 40f // Kích thước chữ
-        paint.textAlign = Paint.Align.CENTER // Căn giữa chữ
-        canvas.drawText(fish.name, fish.x, fish.y + fish.size + 35f, paint)
+        // Vẽ đuôi cá ngừ với nhiều vây
+        paint.color = Color.BLUE
+
+        // Vây đuôi bên trái
+        canvas.drawLine(fish.x - fish.size / 2, fish.y + fish.size, fish.x - fish.size * 1.5f, fish.y + fish.size + 20f, paint) // Vây đuôi trái
+        canvas.drawLine(fish.x - fish.size / 2, fish.y + fish.size, fish.x - fish.size * 1.7f, fish.y + fish.size + 40f, paint) // Vây đuôi phụ trái
+
+        // Vây đuôi bên phải
+        canvas.drawLine(fish.x + fish.size / 2, fish.y + fish.size, fish.x + fish.size * 1.5f, fish.y + fish.size + 20f, paint) // Vây đuôi phải
+        canvas.drawLine(fish.x + fish.size / 2, fish.y + fish.size, fish.x + fish.size * 1.7f, fish.y + fish.size + 40f, paint) // Vây đuôi phụ phải
     }
 }

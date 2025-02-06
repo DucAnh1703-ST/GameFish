@@ -8,17 +8,16 @@ import com.example.gamefish.viewmodel.dt_model.Shark
 
 class SharkView(fish: Shark) : FishView(fish) {
 
-    // Override phương thức draw() để vẽ cá mập
+    // Override phương thức draw() để vẽ cá kiếm
     override fun draw(canvas: Canvas, paint: Paint) {
-        // Vẽ cá mập (ví dụ vẽ hình tròn cho cá mập)
-        paint.color = fish.color
-        paint.style = Paint.Style.FILL
-        canvas.drawCircle(fish.x, fish.y, fish.size, paint)
+        drawBody(canvas, paint) // Vẽ phần chung của cá
 
-        // Vẽ tên của cá mập dưới con cá
-        paint.color = Color.BLACK // Màu chữ
-        paint.textSize = 40f // Kích thước chữ
-        paint.textAlign = Paint.Align.CENTER // Căn giữa chữ
-        canvas.drawText(fish.name, fish.x, fish.y + fish.size + 35f, paint)
+        // Vẽ vây cá mập
+        paint.color = Color.GRAY
+        canvas.drawRect(fish.x - fish.size / 2, fish.y - fish.size / 2, fish.x + fish.size / 2, fish.y - fish.size, paint) // Vây trên
+
+        // Vẽ hàm cá mập
+        paint.color = Color.BLACK
+        canvas.drawLine(fish.x - fish.size / 3, fish.y + fish.size / 2, fish.x + fish.size / 3, fish.y + fish.size / 2, paint) // Hàm dưới
     }
 }
