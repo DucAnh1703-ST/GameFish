@@ -17,13 +17,8 @@ open class Fish(
     var y: Float,
     var size: Float,
     var speed: Float,
-//    val howTodo: ((x:Int, y:Int) -> String)?, // check list been fish tank de tim ra cac doi tuong trung x va y -> xu ly
-//    val check: ((fish: Fish) -> Unit)? // xu ly xem co muc dc con o phia truoc k
 )
 {
-//    open var speed: Float = 0.0f
-//    var size: Float = 20f
-
     private var directionX = (Math.random() * 2 - 1).toFloat()  // Hướng ngẫu nhiên trên trục X (-1 hoặc 1)
     private var directionY = (Math.random() * 2 - 1).toFloat()  // Hướng ngẫu nhiên trên trục Y (-1 hoặc 1)
 
@@ -78,16 +73,7 @@ open class Fish(
         }
     }
 
-    // Vẽ con cá
-//    fun draw(canvas: Canvas, paint: Paint) {
-//        paint.color = color
-//        paint.style = Paint.Style.FILL
-//
-//        canvas.drawCircle(x, y, size, paint)// paint fish
-//    }
-
     open fun draw(canvas: Canvas, paint: Paint){
-
     }
 
     // Cập nhật vị trí con cá
