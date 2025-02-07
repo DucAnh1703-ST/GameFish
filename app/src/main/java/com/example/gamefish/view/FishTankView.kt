@@ -9,16 +9,14 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.Log
 import android.view.SurfaceView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.gamefish.R
+import com.example.gamefish.view.child.JellyfishView
 import com.example.gamefish.view.child.SharkView
-import com.example.gamefish.view.child.SwordFishView
-import com.example.gamefish.view.child.TunaView
+import com.example.gamefish.view.child.CrabView
 import com.example.gamefish.viewmodel.FishTank
 import com.example.gamefish.viewmodel.dt_model.Fish
 import com.example.gamefish.viewmodel.dt_model.Shark
-import com.example.gamefish.viewmodel.dt_model.Tuna
+import com.example.gamefish.viewmodel.dt_model.Jellyfish
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,7 +34,7 @@ class FishTankView(context: Context) : SurfaceView(context) {
         R.drawable.background
     )  // Khai báo và khởi tạo hình nền
 
-    private val padding = 60f  // Khoảng cách từ biên tới bể cá
+    private val padding = 30f  // Khoảng cách từ biên tới bể cá
 
     // Hàm tạo các con cá ngẫu nhiên
     fun createRandomFish() {
@@ -44,11 +42,27 @@ class FishTankView(context: Context) : SurfaceView(context) {
 
         val fishView = when (val fish = fishTank.getFishes().last()) {  // Lấy cá mới được tạo
             is Shark -> SharkView(fish)
-            is Tuna -> TunaView(fish)  // TunaView là một lớp tương tự như SharkView
-            else -> SwordFishView(fish) // SwordFishView tương tự
+            is Jellyfish -> JellyfishView(fish)  // TunaView là một lớp tương tự như SharkView
+            else -> CrabView(fish) // SwordFishView tương tự
         }
 
         fishViews.add(fishView)
+    }
+
+    // Cập nhật danh sách FishView từ LiveData (UI)
+    fun updateFishViews(fishes: List<Fish>) {
+
+        val fishViews = fishes.map { fish ->
+            when (fish) {
+                is Shark -> SharkView(fish)
+                is Jellyfish -> JellyfishView(fish)
+                else -> CrabView(fish)
+            }
+        }
+
+        // Cập nhật danh sách FishViews để vẽ
+        this.fishViews.clear()
+        this.fishViews.addAll(fishViews)
     }
 
     // Vẽ bể cá cố định

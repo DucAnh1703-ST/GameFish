@@ -7,8 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
 
-    <!-- Vùng để chứa GameView -->
+    <!-- FrameLayout nằm dưới nút, có thể chứa GameView -->
+    <FrameLayout
+        android:id="@+id/gameContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
+    <!-- Nút btnAdd nằm đè lên FrameLayout, chính giữa và sát dưới -->
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
@@ -16,20 +27,8 @@
         android:text="@string/str_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameContainer"
-        app:layout_constraintVertical_bias="0.583" />
-
-    <FrameLayout
-        android:id="@+id/gameContainer"
-        android:layout_width="407dp"
-        android:layout_height="661dp"
-        android:layout_marginTop="@dimen/dimen_16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginBottom="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

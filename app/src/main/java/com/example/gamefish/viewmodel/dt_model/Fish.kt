@@ -6,18 +6,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.sqrt
 
 open class Fish(
     var name: String,
     var color: Int,
     var x: Float,
     var y: Float,
-    var size: Float,
-    var speed: Float,
+//    var size: Float = 30f,
+//    var speed: Float = 5f,
 )
 {
-    private var directionX = (Math.random() * 2 - 1).toFloat()  // Hướng ngẫu nhiên trên trục X (-1 hoặc 1)
-    private var directionY = (Math.random() * 2 - 1).toFloat()  // Hướng ngẫu nhiên trên trục Y (-1 hoặc 1)
+    // Các thuộc tính chung cho tất cả các loài cá
+    var size: Float = 0f  // Kích thước của cá
+    var speed: Float = 0f  // Tốc độ của cá
+
+    var directionX = (Math.random() * 2 - 1).toFloat()  // Hướng ngẫu nhiên trên trục X (-1 hoặc 1)
+    var directionY = (Math.random() * 2 - 1).toFloat()  // Hướng ngẫu nhiên trên trục Y (-1 hoặc 1)
 
     private var job: Job? = null
     private var isRunning = false
@@ -29,7 +34,7 @@ open class Fish(
             if (this == otherFish) continue
 
             // Tính khoảng cách giữa hai con cá
-            val distance = Math.sqrt(
+            val distance = sqrt(
                 ((x - otherFish.x) * (x - otherFish.x) + (y - otherFish.y) * (y - otherFish.y)).toDouble()
             ).toFloat()
 
@@ -46,7 +51,7 @@ open class Fish(
             this.size += otherFish.size  // Cá lớn hơn ăn cá nhỏ hơn, tăng kích thước
             otherFish.size = 0f  // Cá nhỏ hơn sẽ bị xóa (kích thước thành 0)
         } else {
-            otherFish.size += this.size  // Cá lớn hơn ăn cá nhỏ hơn, tăng kích thước
+            otherFish.size += this.size / 3   // Cá lớn hơn ăn cá nhỏ hơn, tăng kích thước
             this.size = 0f  // Cá nhỏ hơn sẽ bị xóa (kích thước thành 0)
         }
     }
@@ -71,7 +76,7 @@ open class Fish(
     }
 
     // Cập nhật vị trí con cá
-    private fun move(left: Float, top: Float, right: Float, bottom: Float) {
+    open fun move(left: Float, top: Float, right: Float, bottom: Float) {
         // Di chuyển cá
         x += directionX * speed
         y += directionY * speed
