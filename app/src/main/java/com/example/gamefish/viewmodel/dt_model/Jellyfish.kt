@@ -39,4 +39,14 @@ class Jellyfish(
 
         // Không cần phải kiểm tra hay thay đổi vị trí trên trục X nữa
     }
+
+    // Override phương thức xử lý va chạm để rùa chỉ ăn được cua và sứa
+    override fun handleCollision(otherFish: Fish) {
+        if (otherFish is Crab) { // Chỉ ăn cua
+            if (this.size > otherFish.size) {
+                this.size += otherFish.size / 3 // Rùa ăn và tăng kích thước
+                otherFish.size = 0f  // Cua bị ăn mất
+            }
+        }
+    }
 }

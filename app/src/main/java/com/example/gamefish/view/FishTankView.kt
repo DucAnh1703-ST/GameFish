@@ -13,17 +13,22 @@ import com.example.gamefish.R
 import com.example.gamefish.view.child.JellyfishView
 import com.example.gamefish.view.child.SharkView
 import com.example.gamefish.view.child.CrabView
+import com.example.gamefish.view.child.TurtleView
 import com.example.gamefish.viewmodel.FishTank
+import com.example.gamefish.viewmodel.FishTankViewModel
 import com.example.gamefish.viewmodel.dt_model.Fish
 import com.example.gamefish.viewmodel.dt_model.Shark
 import com.example.gamefish.viewmodel.dt_model.Jellyfish
+import com.example.gamefish.viewmodel.dt_model.Turtle
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.CopyOnWriteArrayList
 
 class FishTankView(context: Context) : SurfaceView(context) {
+    private var viewModel: FishTankViewModel? = null
 
     private val fishTank = FishTank()  // Lớp quản lý cá
     private val fishViews = mutableListOf<FishView>()  // Danh sách các FishView để vẽ cá
@@ -42,6 +47,7 @@ class FishTankView(context: Context) : SurfaceView(context) {
 
         val fishView = when (val fish = fishTank.getFishes().last()) {  // Lấy cá mới được tạo
             is Shark -> SharkView(fish)
+            is Turtle -> TurtleView(fish)
             is Jellyfish -> JellyfishView(fish)  // TunaView là một lớp tương tự như SharkView
             else -> CrabView(fish) // SwordFishView tương tự
         }
@@ -49,21 +55,21 @@ class FishTankView(context: Context) : SurfaceView(context) {
         fishViews.add(fishView)
     }
 
-    // Cập nhật danh sách FishView từ LiveData (UI)
-    fun updateFishViews(fishes: List<Fish>) {
-
-        val fishViews = fishes.map { fish ->
-            when (fish) {
-                is Shark -> SharkView(fish)
-                is Jellyfish -> JellyfishView(fish)
-                else -> CrabView(fish)
-            }
-        }
-
-        // Cập nhật danh sách FishViews để vẽ
-        this.fishViews.clear()
-        this.fishViews.addAll(fishViews)
-    }
+//    // Cập nhật danh sách FishView từ LiveData (UI)
+//    fun updateFishViews(fishes: List<Fish>) {
+//
+//        val fishViews = fishes.map { fish ->
+//            when (fish) {
+//                is Shark -> SharkView(fish)
+//                is Jellyfish -> JellyfishView(fish)
+//                else -> CrabView(fish)
+//            }
+//        }
+//
+//        // Cập nhật danh sách FishViews để vẽ
+//        this.fishViews.clear()
+//        this.fishViews.addAll(fishViews)
+//    }
 
     // Vẽ bể cá cố định
     private fun drawFishTank(canvas: Canvas) {

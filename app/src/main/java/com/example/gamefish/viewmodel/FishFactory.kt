@@ -5,6 +5,7 @@ import com.example.gamefish.viewmodel.dt_model.Fish
 import com.example.gamefish.viewmodel.dt_model.Shark
 import com.example.gamefish.viewmodel.dt_model.Crab
 import com.example.gamefish.viewmodel.dt_model.Jellyfish
+import com.example.gamefish.viewmodel.dt_model.Turtle
 
 class FishFactory {
 
@@ -14,11 +15,12 @@ class FishFactory {
         val randomY = (top + (Math.random() * (bottom - top))).toFloat()
 
         // Chọn một loại cá ngẫu nhiên
-        val fishType = (Math.random() * 3).toInt()
+        val fishType = (Math.random() * 4).toInt()
 
         return when (fishType) {
             0 -> Shark("Shark", Color.RED, randomX, randomY)
             1 -> Jellyfish("Jellyfish", Color.YELLOW, randomX, randomY)
+            2 -> Turtle("Turtle", Color.YELLOW, randomX, randomY)
             else -> Crab("Crab", Color.GREEN, randomX, randomY)
         }
     }

@@ -6,10 +6,10 @@ import com.example.gamefish.viewmodel.dt_model.Fish
 class FishTank {
     private val fishes = mutableListOf<Fish>()  // Danh sách các con cá
 
-    var left = 30f
-    var top = 30f
-    var right = 30f
-    var bottom = 30f
+    var left = 0f
+    var top = 0f
+    var right = 0f
+    var bottom = 0f
 
     private val fishFactory = FishFactory()  // Khởi tạo FishFactory
 

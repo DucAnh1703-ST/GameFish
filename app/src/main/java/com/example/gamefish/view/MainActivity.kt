@@ -39,11 +39,11 @@ class MainActivity : AppCompatActivity() {
         gameView = FishTankView(this)
         binding.gameContainer.addView(gameView)
 
-        // Quan sát LiveData để cập nhật giao diện khi danh sách cá thay đổi
-        fishTankViewModel.fishes.observe(this, Observer { fishes ->
-            // Cập nhật giao diện (gameView) với danh sách cá mới
-            gameView.updateFishViews(fishes)
-        })
+//        // Quan sát LiveData để cập nhật giao diện khi danh sách cá thay đổi
+//        fishTankViewModel.fishes.observe(this, Observer { fishes ->
+//            // Cập nhật giao diện (gameView) với danh sách cá mới
+//            gameView.updateFishViews(fishes)
+//        })
 
         // Bắt sự kiện nhấn nút Add để thêm một con cá ngẫu nhiên
         binding.btnAdd.setOnClickListener {

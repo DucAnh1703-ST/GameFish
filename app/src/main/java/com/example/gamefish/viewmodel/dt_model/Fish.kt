@@ -46,7 +46,7 @@ open class Fish(
     }
 
     // Xử lý va chạm giữa hai con cá
-    private fun handleCollision(otherFish: Fish) {
+    open fun handleCollision(otherFish: Fish) {
         if (this.size > otherFish.size) {
             this.size += otherFish.size  // Cá lớn hơn ăn cá nhỏ hơn, tăng kích thước
             otherFish.size = 0f  // Cá nhỏ hơn sẽ bị xóa (kích thước thành 0)
